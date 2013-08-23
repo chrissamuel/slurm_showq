@@ -381,7 +381,7 @@ void Slurm_Showq::query_running_jobs()
 	}
       else
 	{
-	  printf("JOBID     JOBNAME    USERNAME      STATE   CORE     WCLIMIT  QUEUETIME\n");
+	  printf("JOBID     JOBNAME    USERNAME      STATE     CORE     WCLIMIT  QUEUETIME\n");
 	  printf("================================================================================\n");
 	}
 
@@ -483,8 +483,40 @@ void Slurm_Showq::query_running_jobs()
 	  jobuser_short[14] = '\0';
 	  printf("%-14s", jobuser_short);
 
-	  printf("%-8s","Waiting");
-	  printf("%-6i ",job->num_cpus);
+	  switch(job->state_reason) {
+	  case WAIT_PRIORITY:
+	  	printf("%-10s","Priority");
+		break;
+	  case WAIT_RESOURCES:
+	  	printf("%-10s","Resources");
+		break;
+	  case WAIT_NODE_NOT_AVAIL:
+	  	printf("%-10s","Node down");
+		break;
+	  case WAIT_PART_NODE_LIMIT:
+	  	printf("%-10s","Part.Limit");
+		break;
+	  case WAIT_PART_TIME_LIMIT:
+	  	printf("%-10s","Part.Limit");
+		break;
+	  case FAIL_DOWN_PARTITION:
+	  	printf("%-10s","Part.Fail");
+		break;
+	  case WAIT_PART_DOWN:
+	  	printf("%-10s","Part.Down");
+		break;
+	  case WAIT_NO_REASON:
+	  	printf("%-10s","Waiting");
+		break;
+	  case WAIT_RESERVATION:
+	  	printf("%-10s","Reservation");
+		break;
+	  default:
+	  	printf("%-10s","Waiting");
+		break;
+	  }
+
+	  printf("%-4i ",job->num_cpus);
 
 	  if(long_listing)
 	    {
