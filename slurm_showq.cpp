@@ -589,7 +589,7 @@ void Slurm_Showq::query_running_jobs()
 	    }
 
 	    // Only display blocked jobs to the user who owns them, or root.
-	    if( (strcmp(current_user,uid_to_string(job->user_id).c_str()) != 0) && (strcmp(current_user,"root") != 0) )
+	    if( (strcmp(current_user,uid_to_string(job->user_id).c_str()) != 0) && (strcmp(current_user,"root") != 0) && (true!=show_blocked) )
 		continue;
 
 	  // Display job info
@@ -940,6 +940,9 @@ void Slurm_Showq::parse_supported_options(int argc, char *argv[])
   if(cl.search(2,"--long","-l"))
     long_listing = true;
 
+  if(cl.search(2,"--blocked","-b"))
+    show_blocked = true;
+
   if(cl.search(2,"--help","-h"))
     print_usage();
 
@@ -1077,6 +1080,7 @@ Slurm_Showq::Slurm_Showq()
 {
   // default values
 
+  show_blocked     = false;
   long_listing     = false;
   user_jobs_only   = false;
   named_user_jobs_only = false;
