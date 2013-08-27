@@ -512,6 +512,9 @@ void Slurm_Showq::query_running_jobs()
 	  case WAIT_RESERVATION:
 	  	printf("%-10s","Reservation");
 		break;
+	  case WAIT_QOS_RESOURCE_LIMIT:
+	  	printf("%-10s","Job Limit");
+		break;
 	  default:
 	  	printf("%-10s","Waiting");
 		break;
