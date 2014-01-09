@@ -493,7 +493,7 @@ void Slurm_Showq::query_running_jobs()
 	  	printf("%-10s","Resources");
 		break;
 	  case WAIT_NODE_NOT_AVAIL:
-	  	printf("%-10s","Cannot run");
+	  	printf("%-10s","Can't run");
 		break;
 	  case WAIT_PART_NODE_LIMIT:
 	  	printf("%-10s","Part.Limit");
