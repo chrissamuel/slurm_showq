@@ -42,7 +42,7 @@ OPTIONS:
   -u [ --user ]           display jobs for current user only
   -U <username>           display jobs for username only
   -p, -q partition        display jobs for partition/queue
-  -o                      display pending jobs in order of priority
+  -o                      do not display pending jobs in order of priority
 
 
 ---------------

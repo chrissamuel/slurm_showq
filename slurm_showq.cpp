@@ -971,7 +971,7 @@ void Slurm_Showq::parse_supported_options(int argc, char *argv[])
 
   if (cl.search("-o"))
 	{
-	  sort_by_priority=true;
+	  sort_by_priority=false;
     }
 
   if (user_jobs_only && named_user_jobs_only)
@@ -1001,7 +1001,7 @@ void Slurm_Showq::print_usage()
   printf("  -u [ --user ]           display jobs for current user only\n");
   printf("  -U <username>           display jobs for username only\n");
   printf("  -p, -q partition        display jobs for partition/queue\n");
-  printf("  -o                      display pending jobs in order of priority\n");
+  printf("  -o                      do not display pending jobs in order of priority\n");
   
   printf("\n");
   exit(0);
@@ -1095,7 +1095,7 @@ Slurm_Showq::Slurm_Showq()
   named_partition_jobs_only = false;
   show_all_reserv  = false;
   show_utilization = false;
-  sort_by_priority = false;
+  sort_by_priority = true;
 
   RES_LEAD_WINDOW = 24*7*3600;	// 7-day lead time
 
