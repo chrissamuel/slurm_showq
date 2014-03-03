@@ -586,7 +586,7 @@ void Slurm_Showq::query_running_jobs()
 	     job->state_reason != WAIT_ASSOC_RESOURCE_LIMIT &&
 	     job->state_reason != WAIT_ASSOC_JOB_LIMIT &&
 	     job->state_reason != WAIT_HELD            &&
-	     job->state_reason != WAIT_QOS_RESOURCE_LIMIT ||
+	     job->state_reason != WAIT_QOS_RESOURCE_LIMIT &&
 	     job->state_reason != WAIT_HELD_USER )
 	    {
 	      continue;
