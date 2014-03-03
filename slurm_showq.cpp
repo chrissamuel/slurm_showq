@@ -613,9 +613,9 @@ void Slurm_Showq::query_running_jobs()
           else if ( (job->state_reason == WAIT_HELD) || (job->state_reason == WAIT_HELD_USER) )
                 printf("%-8s","Held");
           else if ( job->state_reason == WAIT_QOS_RESOURCE_LIMIT )
-                printf("%-8s","Job Limit");
+                printf("%-8s","Limits");
           else if ( job->state_reason == WAIT_DEPENDENCY )
-                printf("%-8s","Dependency");
+                printf("%-8s","Depends");
 	  else
 	  	printf("%-8s","Waiting");
 
