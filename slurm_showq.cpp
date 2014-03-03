@@ -450,6 +450,7 @@ void Slurm_Showq::query_running_jobs()
 	     job->state_reason == WAIT_TIME             || 
 	     job->state_reason == WAIT_ASSOC_JOB_LIMIT  || 
 	     job->state_reason == WAIT_ASSOC_RESOURCE_LIMIT  || 
+	     job->state_reason != WAIT_QOS_RESOURCE_LIMIT ||
 	     job->state_reason == WAIT_HELD_USER )
 	    {
 	      blocked_jobs++;
@@ -464,7 +465,6 @@ void Slurm_Showq::query_running_jobs()
 	     job->state_reason != FAIL_DOWN_PARTITION  && 
 	     job->state_reason != WAIT_PART_DOWN       && 
 	     job->state_reason != WAIT_NO_REASON       && 
-	     job->state_reason != WAIT_QOS_RESOURCE_LIMIT && 
 	     job->state_reason != WAIT_RESERVATION )
 	    {
 	      printf("[Warn]: unknown job state - pending job reason = %i\n",job->state_reason);
@@ -512,9 +512,6 @@ void Slurm_Showq::query_running_jobs()
 		break;
 	  case WAIT_RESERVATION:
 	  	printf("%-10s","Reservation");
-		break;
-	  case WAIT_QOS_RESOURCE_LIMIT:
-	  	printf("%-10s","Job Limit");
 		break;
 	  default:
 	  	printf("%-10s","Waiting");
@@ -589,6 +586,7 @@ void Slurm_Showq::query_running_jobs()
 	     job->state_reason != WAIT_ASSOC_RESOURCE_LIMIT &&
 	     job->state_reason != WAIT_ASSOC_JOB_LIMIT &&
 	     job->state_reason != WAIT_HELD            &&
+	     job->state_reason != WAIT_QOS_RESOURCE_LIMIT ||
 	     job->state_reason != WAIT_HELD_USER )
 	    {
 	      continue;
@@ -614,6 +612,10 @@ void Slurm_Showq::query_running_jobs()
 	  	printf("%-8s","Quota");
           else if ( (job->state_reason == WAIT_HELD) || (job->state_reason == WAIT_HELD_USER) )
                 printf("%-8s","Held");
+          else if ( job->state_reason == WAIT_QOS_RESOURCE_LIMIT )
+                printf("%-8s","Job Limit");
+          else if ( job->state_reason == WAIT_DEPENDENCY )
+                printf("%-8s","Dependency");
 	  else
 	  	printf("%-8s","Waiting");
 
