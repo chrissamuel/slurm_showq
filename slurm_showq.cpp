@@ -136,13 +136,13 @@ void Slurm_Showq::query_running_jobs()
 	  printf("ACTIVE JOBS--------------------\n");
       if(long_listing)
 	{
-	  printf("JOBID     JOBNAME    USERNAME      STATE   CORE   NODE QUEUE         REMAINING  STARTTIME\n");
-	  printf("===================================================================================================\n");
+	  printf("JOBID     JOBNAME    USERNAME      STATE     CORE   NODE QUEUE         REMAINING  STARTTIME\n");
+	  printf("=====================================================================================================\n");
 	}
       else
 	{
-	  printf("JOBID     JOBNAME    USERNAME      STATE   CORE   REMAINING  STARTTIME\n");
-	  printf("================================================================================\n");
+	  printf("JOBID     JOBNAME    USERNAME      STATE     CORE   REMAINING  STARTTIME\n");
+	  printf("==================================================================================\n");
 	}
 
       /*-------------------------------
@@ -244,7 +244,7 @@ void Slurm_Showq::query_running_jobs()
 	  jobuser_short[14] = '\0';
 	  printf("%-14s", jobuser_short);
 
-	  printf("%-8s","Running");
+	  printf("%-10s","Running");
 	  printf("%-6i ",job->num_cpus);;
 
 	  if(long_listing)
@@ -503,7 +503,7 @@ void Slurm_Showq::query_running_jobs()
 	  	printf("%-10s","Resources");
 		break;
 	  case WAIT_NODE_NOT_AVAIL:
-	  	printf("%-10s","Waiting");
+		printf("%-10s","Waiting");
 		break;
 	  case WAIT_PART_NODE_LIMIT:
 	  	printf("%-10s","Part.Limit");
@@ -518,13 +518,13 @@ void Slurm_Showq::query_running_jobs()
 	  	printf("%-10s","Part.Down");
 		break;
 	  case WAIT_NO_REASON:
-	  	printf("%-10s","Waiting");
+		printf("%-10s","Waiting");
 		break;
 	  case WAIT_RESERVATION:
 	  	printf("%-10s","Reservation");
 		break;
 	  default:
-	  	printf("%-10s","Waiting");
+		printf("%-10s","Waiting");
 		break;
 	  }
 
@@ -574,13 +574,13 @@ void Slurm_Showq::query_running_jobs()
       printf("\nBLOCKED JOBS--\n");
       if(long_listing)
 	{
-	  printf("JOBID     JOBNAME    USERNAME      STATE   CORE  HOST  QUEUE           WCLIMIT  QUEUETIME\n");
-	  printf("=======================================================================-===========================\n");
+	  printf("JOBID     JOBNAME    USERNAME      STATE     CORE  HOST  QUEUE           WCLIMIT  QUEUETIME\n");
+	  printf("=========================================================================-===========================\n");
 	}
       else
 	{
-	  printf("JOBID     JOBNAME    USERNAME      STATE   CORE     WCLIMIT  QUEUETIME\n");
-	  printf("================================================================================\n");
+	  printf("JOBID     JOBNAME    USERNAME      STATE     CORE     WCLIMIT  QUEUETIME\n");
+	  printf("==================================================================================\n");
 	}
 
       for(int i=0; i<pending_jobs.size();i++)
@@ -626,25 +626,25 @@ void Slurm_Showq::query_running_jobs()
 	  printf("%-14s", jobuser_short);
 
 	  if(job->state_reason == WAIT_ASSOC_JOB_LIMIT)
-	  	printf("%-8s","Quota");
+		printf("%-10s","Quota");
           else if ( (job->state_reason == WAIT_HELD) || (job->state_reason == WAIT_HELD_USER) )
-                printf("%-8s","Held");
+                printf("%-10s","Held");
           else if ( job->state_reason == WAIT_QOS_RESOURCE_LIMIT )
-                printf("%-8s","Limits");
+                printf("%-10s","Limits");
           else if ( job->state_reason == WAIT_ASSOC_GRP_CPU_MIN )
-                printf("%-8s","Limits");
+                printf("%-10s","Limits");
           else if ( job->state_reason == WAIT_QOS_MAX_JOB_PER_USER )
-                printf("%-8s","Limits");
+                printf("%-10s","Limits");
           else if ( job->state_reason == WAIT_ASSOC_RESOURCE_LIMIT )
-                printf("%-8s","Limits");
+                printf("%-10s","Limits");
           else if ( job->state_reason == WAIT_ASSOC_GRP_CPU )
-                printf("%-8s","Limits");
+                printf("%-10s","Limits");
           else if ( job->state_reason == WAIT_DEP_INVALID )
-                printf("%-8s","BadDepend");
+                printf("%-10s","BadDepend");
           else if ( job->state_reason == WAIT_DEPENDENCY )
-                printf("%-8s","Depends");
+		printf("%-10s","Depends");
 	  else
-	  	printf("%-8s","Waiting");
+		printf("%-10s","Waiting");
 
 	  printf("%-6i ",job->num_cpus);
 
