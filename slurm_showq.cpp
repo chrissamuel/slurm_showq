@@ -458,6 +458,7 @@ void Slurm_Showq::query_running_jobs()
 	     job->state_reason == WAIT_QOS_MAX_JOB_PER_USER ||
 	     job->state_reason == WAIT_ASSOC_GRP_CPU_MIN ||
 	     job->state_reason == WAIT_QOS_RESOURCE_LIMIT ||
+	     job->state_reason == WAIT_ASSOC_GRP_JOB ||
 	     job->state_reason == WAIT_HELD_USER )
 	    {
 	      blocked_jobs++;
@@ -638,6 +639,8 @@ void Slurm_Showq::query_running_jobs()
           else if ( job->state_reason == WAIT_ASSOC_RESOURCE_LIMIT )
                 printf("%-10s","Limits");
           else if ( job->state_reason == WAIT_ASSOC_GRP_CPU )
+                printf("%-10s","Limits");
+          else if ( job->state_reason == WAIT_ASSOC_GRP_JOB )
                 printf("%-10s","Limits");
           else if ( job->state_reason == WAIT_DEP_INVALID )
                 printf("%-10s","BadDepend");
