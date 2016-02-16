@@ -30,12 +30,19 @@
 #include <set>
 #include <string>
 #include "GetPot"
+#include <inttypes.h>
 
 using namespace std;
 
 // Type for a user cache mapping uid <-> username.
 # include <map>
 typedef std::map<uid_t, std::string> TUserCache;
+
+// Type for a user job count
+typedef std::map<uid_t, int> TJobUidCache;
+
+// Type for is a job blocked cache
+typedef std::map<uint32_t, int> TJobBlockedCache;
 
 #include <sys/types.h>
 #include <pwd.h>
@@ -50,7 +57,7 @@ typedef std::map<uid_t, std::string> TUserCache;
 #include <cstdlib>
 #include <vector>
 
-#define VERSION 0.11
+#define VERSION 0.12
 
 class Slurm_Showq {
 
@@ -63,6 +70,8 @@ class Slurm_Showq {
 private:
 
   std::string uid_to_string(uid_t id);
+  int how_many_jobs(uid_t id);
+  bool too_many_waiting(uint32_t job_id, uid_t id);
   std::string get_executable_path();
 
   void print_usage();

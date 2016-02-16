@@ -459,7 +459,8 @@ void Slurm_Showq::query_running_jobs()
 	     job->state_reason == WAIT_ASSOC_GRP_CPU_MIN ||
 	     job->state_reason == WAIT_QOS_RESOURCE_LIMIT ||
 	     job->state_reason == WAIT_ASSOC_GRP_JOB ||
-	     job->state_reason == WAIT_HELD_USER )
+	     job->state_reason == WAIT_HELD_USER ||
+	     too_many_waiting(job->job_id, job->user_id) )
 	    {
 	      blocked_jobs++;
 	      continue;
@@ -602,7 +603,8 @@ void Slurm_Showq::query_running_jobs()
 	     job->state_reason != WAIT_DEP_INVALID &&
 	     job->state_reason != WAIT_QOS_MAX_JOB_PER_USER &&
 	     job->state_reason != WAIT_ASSOC_GRP_CPU_MIN &&
-	     job->state_reason != WAIT_HELD_USER )
+	     job->state_reason != WAIT_HELD_USER &&
+	     too_many_waiting(job->job_id, job->user_id) != true )
 	    {
 	      continue;
 	    }
@@ -981,6 +983,45 @@ std::string Slurm_Showq::uid_to_string(uid_t id)
   return(username);
       
 }
+
+// Function to keep track of how many jobs a user has submitted
+int Slurm_Showq::how_many_jobs(uid_t id)
+{
+	static TJobUidCache JobUidMap;
+
+	if ( JobUidMap.find(id) == JobUidMap.end() )
+	{
+		JobUidMap[id]=1;
+	}
+	else
+	{
+		JobUidMap[id]++;
+	}
+
+	return( JobUidMap[id] );
+}
+
+// Function to report whether a job should be listed as blocked due to exceeding bf_max_job_user
+// Returns false if it counts as idle, otherwise returns true for blocked.
+bool Slurm_Showq::too_many_waiting(uint32_t job_id, uid_t id)
+{
+	static TJobBlockedCache JobBlockedMap;
+
+	if ( JobBlockedMap.find(job_id) == JobBlockedMap.end() )
+	{
+		if ( how_many_jobs(id) > 5 )
+		{
+			JobBlockedMap[job_id]=1;
+		}
+		else
+		{
+			JobBlockedMap[job_id]=0;
+		}
+	}
+
+	return( JobBlockedMap[job_id] );
+}
+	
 
 //-------------------------------------------------------------
 // parse_supported_options: Parse/Define command line arguments
