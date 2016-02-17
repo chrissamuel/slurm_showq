@@ -649,8 +649,6 @@ void Slurm_Showq::query_running_jobs()
                 printf("%-10s","Limits");
           else if ( job->state_reason == WAIT_ASSOC_MAX_JOBS )
                 printf("%-10s","Limits");
-          else if ( job->state_reason == WAIT_QOS_MAX_JOB_PER_USER )
-                printf("%-10s","Limits");
           else if ( job->state_reason == WAIT_DEP_INVALID )
                 printf("%-10s","BadDepend");
           else if ( job->state_reason == WAIT_DEPENDENCY )
