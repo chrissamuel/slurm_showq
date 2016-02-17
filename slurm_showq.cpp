@@ -604,6 +604,7 @@ void Slurm_Showq::query_running_jobs()
 	     job->state_reason != WAIT_DEP_INVALID &&
 	     job->state_reason != WAIT_QOS_MAX_JOB_PER_USER &&
 	     job->state_reason != WAIT_ASSOC_GRP_CPU_MIN &&
+	     job->state_reason != WAIT_ASSOC_MAX_JOBS &&
 	     job->state_reason != WAIT_HELD_USER &&
 	     too_many_waiting(job->job_id, job->user_id) != true )
 	    {
