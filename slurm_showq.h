@@ -57,7 +57,7 @@ typedef std::map<uint32_t, int> TJobBlockedCache;
 #include <cstdlib>
 #include <vector>
 
-#define VERSION 0.13
+#define VERSION 0.14
 
 // Slurm function to retrieve the reason code for a job as a string.
 extern "C" char *slurm_job_reason_string(enum job_state_reason inx);
