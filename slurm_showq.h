@@ -75,6 +75,7 @@ private:
   std::string uid_to_string(uid_t id);
   int how_many_jobs(uid_t id);
   bool too_many_waiting(uint32_t job_id, uid_t id);
+  bool is_job_blocked(job_info_t * job);
   std::string get_executable_path();
 
   void print_usage();

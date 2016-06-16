@@ -27,6 +27,21 @@
 
 #include "slurm_showq.h"
 
+bool Slurm_Showq::is_job_blocked(job_info_t * job)
+{
+	  if(job->state_reason == WAIT_PRIORITY       ||
+	     job->state_reason == WAIT_RESOURCES      ||
+	     job->state_reason == WAIT_NO_REASON      ||
+	     job->state_reason == WAIT_BLOCK_MAX_ERR  ||
+	     job->state_reason == WAIT_BLOCK_D_ACTION ||
+	     job->state_reason == WAIT_PROLOG)
+	{
+		return(false);
+	}
+	return(true);
+}
+
+
 void Slurm_Showq::query_running_jobs()
 {
   char *user, *starttime, *shorttime, *pendreason, *endtime, *submittime;
@@ -448,20 +463,7 @@ void Slurm_Showq::query_running_jobs()
 		continue;
 
 
-	  if(job->state_reason == WAIT_DEPENDENCY       ||
-	     job->state_reason == WAIT_HELD             ||
-	     job->state_reason == WAIT_TIME             || 
-	     job->state_reason == WAIT_ASSOC_JOB_LIMIT  || 
-	     job->state_reason == WAIT_ASSOC_GRP_CPU    ||
-	     job->state_reason == WAIT_ASSOC_RESOURCE_LIMIT  || 
-	     job->state_reason == WAIT_DEP_INVALID ||
-	     job->state_reason == WAIT_QOS_MAX_JOB_PER_USER ||
-	     job->state_reason == WAIT_ASSOC_GRP_CPU_MIN ||
-	     job->state_reason == WAIT_QOS_RESOURCE_LIMIT ||
-	     job->state_reason == WAIT_ASSOC_GRP_JOB ||
-	     job->state_reason == WAIT_ASSOC_MAX_JOBS ||
-	     job->state_reason == WAIT_HELD_USER ||
-	     too_many_waiting(job->job_id, job->user_id) )
+	  if(is_job_blocked(job) || too_many_waiting(job->job_id, job->user_id) )
 	    {
 	      blocked_jobs++;
 	      continue;
@@ -550,18 +552,7 @@ void Slurm_Showq::query_running_jobs()
 	  	  if(job->job_state != JOB_PENDING)
 	  	    continue;
 
-	  if(job->state_reason != WAIT_DEPENDENCY      &&
-	     job->state_reason != WAIT_ASSOC_RESOURCE_LIMIT &&
-	     job->state_reason != WAIT_ASSOC_JOB_LIMIT &&
-	     job->state_reason != WAIT_ASSOC_GRP_CPU &&
-	     job->state_reason != WAIT_HELD            &&
-	     job->state_reason != WAIT_QOS_RESOURCE_LIMIT &&
-	     job->state_reason != WAIT_DEP_INVALID &&
-	     job->state_reason != WAIT_QOS_MAX_JOB_PER_USER &&
-	     job->state_reason != WAIT_ASSOC_GRP_CPU_MIN &&
-	     job->state_reason != WAIT_ASSOC_MAX_JOBS &&
-	     job->state_reason != WAIT_HELD_USER &&
-	     too_many_waiting(job->job_id, job->user_id) != true )
+	  if((!is_job_blocked(job)) && too_many_waiting(job->job_id, job->user_id) != true )
 	    {
 	      continue;
 	    }
