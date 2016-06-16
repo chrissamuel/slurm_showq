@@ -137,7 +137,7 @@ void Slurm_Showq::query_running_jobs()
       if(long_listing)
 	{
 	  printf("JOBID     JOBNAME    USERNAME      STATE     CORE   NODE QUEUE         REMAINING  STARTTIME\n");
-	  printf("=====================================================================================================\n");
+	  printf("================================================================================================\n");
 	}
       else
 	{
@@ -379,13 +379,13 @@ void Slurm_Showq::query_running_jobs()
       printf("\nWAITING JOBS------------------------\n");
       if(long_listing)
 	{
-	  printf("JOBID     JOBNAME    USERNAME      STATE   CORE  HOST  QUEUE           WCLIMIT  QUEUETIME\n");
-	  printf("=======================================================================-===========================\n");
+	  printf("JOBID     JOBNAME    USERNAME      STATE          CORE HOST QUEUE           WCLIMIT  QUEUETIME\n");
+	  printf("========================================================================================================\n");
 	}
       else
 	{
-	  printf("JOBID     JOBNAME    USERNAME      STATE     CORE     WCLIMIT  QUEUETIME\n");
-	  printf("================================================================================\n");
+	  printf("JOBID     JOBNAME    USERNAME      STATE          CORE   WCLIMIT  QUEUETIME\n");
+	  printf("=====================================================================================\n");
 	}
 
     /* We are going to sort the jobs in order of priorty */
@@ -467,20 +467,6 @@ void Slurm_Showq::query_running_jobs()
 	      continue;
 	    }
 
-	  if(job->state_reason != WAIT_PRIORITY        && 
-	     job->state_reason != WAIT_RESOURCES       &&
-	     job->state_reason != WAIT_NODE_NOT_AVAIL  &&
-	     job->state_reason != WAIT_PART_NODE_LIMIT &&
-	     job->state_reason != WAIT_PART_TIME_LIMIT && 
-	     job->state_reason != FAIL_DOWN_PARTITION  && 
-	     job->state_reason != WAIT_PART_DOWN       && 
-	     job->state_reason != WAIT_NO_REASON       && 
-	     job->state_reason != WAIT_RESERVATION )
-	    {
-	      printf("[Warn]: unknown job state - pending job reason = %i\n",job->state_reason);
-	      continue;
-	    }
-
 	  idle_jobs++;
 
 	  // Display job info
@@ -498,38 +484,7 @@ void Slurm_Showq::query_running_jobs()
 	  jobuser_short[14] = '\0';
 	  printf("%-14s", jobuser_short);
 
-	  switch(job->state_reason) {
-	  case WAIT_PRIORITY:
-	  	printf("%-10s","Priority");
-		break;
-	  case WAIT_RESOURCES:
-	  	printf("%-10s","Resources");
-		break;
-	  case WAIT_NODE_NOT_AVAIL:
-		printf("%-10s","Waiting");
-		break;
-	  case WAIT_PART_NODE_LIMIT:
-	  	printf("%-10s","Part.Limit");
-		break;
-	  case WAIT_PART_TIME_LIMIT:
-	  	printf("%-10s","Part.Limit");
-		break;
-	  case FAIL_DOWN_PARTITION:
-	  	printf("%-10s","Part.Fail");
-		break;
-	  case WAIT_PART_DOWN:
-	  	printf("%-10s","Part.Down");
-		break;
-	  case WAIT_NO_REASON:
-		printf("%-10s","Waiting");
-		break;
-	  case WAIT_RESERVATION:
-	  	printf("%-10s","Reservation");
-		break;
-	  default:
-		printf("%-10s","Waiting");
-		break;
-	  }
+	  printf("%-15s",slurm_job_reason_string((enum job_state_reason)job->state_reason));
 
 	  printf("%-4i ",job->num_cpus);
 
@@ -577,13 +532,13 @@ void Slurm_Showq::query_running_jobs()
       printf("\nBLOCKED JOBS--\n");
       if(long_listing)
 	{
-	  printf("JOBID     JOBNAME    USERNAME      STATE     CORE  HOST  QUEUE           WCLIMIT  QUEUETIME\n");
-	  printf("=========================================================================-===========================\n");
+	  printf("JOBID     JOBNAME    USERNAME      STATE          CORE HOST QUEUE           WCLIMIT  QUEUETIME\n");
+	  printf("========================================================================================================\n");
 	}
       else
 	{
-	  printf("JOBID     JOBNAME    USERNAME      STATE     CORE     WCLIMIT  QUEUETIME\n");
-	  printf("==================================================================================\n");
+	  printf("JOBID     JOBNAME    USERNAME      STATE          CORE   WCLIMIT  QUEUETIME\n");
+	  printf("=====================================================================================\n");
 	}
 
       for(int i=0; i<pending_jobs.size();i++)
@@ -630,32 +585,9 @@ void Slurm_Showq::query_running_jobs()
 	  jobuser_short[14] = '\0';
 	  printf("%-14s", jobuser_short);
 
-	  if(job->state_reason == WAIT_ASSOC_JOB_LIMIT)
-		printf("%-10s","Quota");
-          else if ( (job->state_reason == WAIT_HELD) || (job->state_reason == WAIT_HELD_USER) )
-                printf("%-10s","Held");
-          else if ( job->state_reason == WAIT_QOS_RESOURCE_LIMIT )
-                printf("%-10s","Limits");
-          else if ( job->state_reason == WAIT_ASSOC_GRP_CPU_MIN )
-                printf("%-10s","Limits");
-          else if ( job->state_reason == WAIT_QOS_MAX_JOB_PER_USER )
-                printf("%-10s","Limits");
-          else if ( job->state_reason == WAIT_ASSOC_RESOURCE_LIMIT )
-                printf("%-10s","Limits");
-          else if ( job->state_reason == WAIT_ASSOC_GRP_CPU )
-                printf("%-10s","Limits");
-          else if ( job->state_reason == WAIT_ASSOC_GRP_JOB )
-                printf("%-10s","Limits");
-          else if ( job->state_reason == WAIT_ASSOC_MAX_JOBS )
-                printf("%-10s","Limits");
-          else if ( job->state_reason == WAIT_DEP_INVALID )
-                printf("%-10s","BadDepend");
-          else if ( job->state_reason == WAIT_DEPENDENCY )
-		printf("%-10s","Depends");
-	  else
-		printf("%-10s","Waiting");
+	  printf("%-15s",slurm_job_reason_string((enum job_state_reason)job->state_reason));
 
-	  printf("%-6i ",job->num_cpus);
+	  printf("%-4i ",job->num_cpus);
 
 	  if(long_listing)
 	    {
@@ -773,6 +705,14 @@ void Slurm_Showq::query_running_jobs()
   printf("\nTotal Jobs: %-4i  Active Jobs: %-4i  Idle Jobs: %-4i  "
 	 "Blocked Jobs: %-4i\n",rjobs+idle_jobs+blocked_jobs,
 	 rjobs,idle_jobs,blocked_jobs);
+
+  /*----------
+   * Advice for using "exlpain" to describe reason codes
+   *----------*/
+
+  printf("\nTo learn more about a reason code please run: explain [reason]\n");
+  printf("For example: explain BlockMaxError\n\n");
+
 //
 //  /*------------------------------
 //   * Query advanced reservations 
