@@ -1048,7 +1048,7 @@ void Slurm_Showq::print_usage()
 void Slurm_Showq::print_version()
 {
   printf("\n--------------------------------------------------\n");
-  printf("%s: Version %2.1f\n\n",progname.c_str(),VERSION);
+  printf("%s: Version %2.2f\n\n",progname.c_str(),VERSION);
   printf("Texas Advanced Computing Center\n");
   printf("The University of Texas at Austin\n");
   printf("Research Computing\n");
