@@ -59,6 +59,11 @@ typedef std::map<uint32_t, int> TJobBlockedCache;
 
 #define VERSION 0.14
 
+// From the Slurm include file src/common/slurm_protocol_defs.h
+#define IS_JOB_PENDING(_X)              \
+        ((_X->job_state & JOB_STATE_BASE) == JOB_PENDING)
+
+
 // Slurm function to retrieve the reason code for a job as a string.
 extern "C" char *slurm_job_reason_string(enum job_state_reason inx);
 

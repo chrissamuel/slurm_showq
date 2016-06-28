@@ -180,7 +180,7 @@ void Slurm_Showq::query_running_jobs()
 
 	  // keep track of pending jobs...
 
-	  if(job->job_state == JOB_PENDING)
+	  if(IS_JOB_PENDING(job))
 	    {
 	      num_pending_jobs++;
 	      pending_jobs.push_back(i);
@@ -453,7 +453,7 @@ void Slurm_Showq::query_running_jobs()
 
       strncpy(queuename_short,job->partition,255);
 
-	  if(job->job_state != JOB_PENDING)
+	  if(!IS_JOB_PENDING(job))
 	    continue;
 	  if ((local_user_jobs_only) && 
 	      (strcmp(current_user,uid_to_string(job->user_id).c_str()) != 0) )
@@ -549,7 +549,7 @@ void Slurm_Showq::query_running_jobs()
 	  job_info_t * job;
 	  job = &job_ptr->job_array[pending_jobs[i]];
 
-	  	  if(job->job_state != JOB_PENDING)
+	  	  if(!IS_JOB_PENDING(job))
 	  	    continue;
 
 	  if((!is_job_blocked(job)) && too_many_waiting(job->job_id, job->user_id) != true )
