@@ -57,7 +57,7 @@ typedef std::map<uint32_t, int> TJobBlockedCache;
 #include <cstdlib>
 #include <vector>
 
-#define VERSION 0.14
+#define VERSION 0.15
 
 // From the Slurm include file src/common/slurm_protocol_defs.h
 #define IS_JOB_PENDING(_X)              \
