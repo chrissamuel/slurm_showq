@@ -701,8 +701,8 @@ void Slurm_Showq::query_running_jobs()
    * Advice for using "exlpain" to describe reason codes
    *----------*/
 
-  printf("\nTo learn more about a reason code please run: explain [reason]\n");
-  printf("For example: explain BlockMaxError\n\n");
+  printf("\nTo learn more about a reason code please run: man squeue\n");
+  printf("and check the \"JOB REASON CODES\" section for an explanation.\n\n");
 
 //
 //  /*------------------------------
