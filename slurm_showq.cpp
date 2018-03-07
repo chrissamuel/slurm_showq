@@ -702,7 +702,7 @@ void Slurm_Showq::query_running_jobs()
    *----------*/
 
   printf("\nTo learn more about a reason code please run: man squeue\n");
-  printf("and check the \"JOB REASON CODES\" section for an explanation.\n\n");
+  printf("Then check the \"JOB REASON CODES\" section for information.\n\n");
 
 //
 //  /*------------------------------
