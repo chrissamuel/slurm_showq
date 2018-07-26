@@ -1047,6 +1047,8 @@ void Slurm_Showq::print_version()
   printf("The University of Texas at Austin\n");
   printf("Research Computing\n");
   printf("Harvard University\n");
+  printf("University of Melbourne\n");
+  printf("Swinburne University of Technology\n");
   printf("--------------------------------------------------\n");
   printf("\n");
 
