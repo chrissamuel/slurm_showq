@@ -240,7 +240,7 @@ void Slurm_Showq::query_running_jobs()
 	  
 	  if(hours_remain < 0 || mins_remain < 0 || secs_remain < 0)
 	    {	 
-	      printf("[Warn]: runlimit exhausted: runningpending job reason = %i\n",job->state_reason);
+	      printf("[Warn]: runlimit exhausted for %d: runningpending job reason = %i\n",job->job_id,job->state_reason);
 	      continue;
 	    }
 
