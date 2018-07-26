@@ -189,7 +189,10 @@ void Slurm_Showq::query_running_jobs()
 
 	  current_time = time(NULL);
 	  secs_max     = job->time_limit*60; // max runtime (converted to secs)
-	  remain_time  = (time_t)difftime(secs_max+job->start_time,current_time);
+	  if ( job->suspend_time )
+	      remain_time  = (time_t)difftime(secs_max,(job->pre_sus_time+difftime(current_time,job->suspend_time)));
+	  else
+	      remain_time  = (time_t)difftime(secs_max+job->start_time,current_time);
 
 	  // keep track of completing jobs - those which have exceeded
 	  // their runlimit by a given threshold are flagged as
