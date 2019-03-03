@@ -48,6 +48,7 @@ void Slurm_Showq::query_running_jobs()
   time_t current_time, remain_time;
   hostlist_t job_nodelist;
   char *host;
+  char jobid_short    [256];
   char jobuser_short  [256];
   char jobname_short  [256];
   char queuename_short[256];
@@ -151,13 +152,13 @@ void Slurm_Showq::query_running_jobs()
 	  printf("ACTIVE JOBS--------------------\n");
       if(long_listing)
 	{
-	  printf("JOBID     JOBNAME    USERNAME      STATE     CORE   NODE QUEUE         REMAINING  STARTTIME\n");
-	  printf("================================================================================================\n");
+	  printf("JOBID          JOBNAME    USERNAME      STATE     CORE   NODE QUEUE         REMAINING  STARTTIME\n");
+	  printf("==========================================================================================================\n");
 	}
       else
 	{
-	  printf("JOBID     JOBNAME    USERNAME      STATE     CORE   REMAINING  STARTTIME\n");
-	  printf("==================================================================================\n");
+	  printf("JOBID          JOBNAME    USERNAME      STATE     CORE   REMAINING  STARTTIME\n");
+	  printf("=======================================================================================\n");
 	}
 
       /*-------------------------------
@@ -249,7 +250,14 @@ void Slurm_Showq::query_running_jobs()
 
 	  // Display job info
 
-	  printf("%-10i", job->job_id);  
+	  if (0 != job->array_job_id)
+	    {
+	      snprintf(jobid_short, 255, "%i_%i", job->array_job_id, job->array_task_id);
+	      jobid_short[15] = '\0';
+	      printf("%-15s", jobid_short);
+	    }
+	  else
+	      printf("%-15i", job->job_id);
 
 	  if(NULL != job->name)
 		strncpy(jobname_short,job->name,10);
@@ -397,13 +405,13 @@ void Slurm_Showq::query_running_jobs()
       printf("\nWAITING JOBS------------------------\n");
       if(long_listing)
 	{
-	  printf("JOBID     JOBNAME    USERNAME      STATE          CORE HOST QUEUE           WCLIMIT  QUEUETIME\n");
-	  printf("========================================================================================================\n");
+	  printf("JOBID               JOBNAME    USERNAME      STATE          CORE HOST QUEUE           WCLIMIT  QUEUETIME\n");
+	  printf("==================================================================================================================\n");
 	}
       else
 	{
-	  printf("JOBID     JOBNAME    USERNAME      STATE          CORE   WCLIMIT  QUEUETIME\n");
-	  printf("=====================================================================================\n");
+	  printf("JOBID               JOBNAME    USERNAME      STATE          CORE   WCLIMIT  QUEUETIME\n");
+	  printf("===============================================================================================\n");
 	}
 
     /* We are going to sort the jobs in order of priorty */
@@ -476,7 +484,14 @@ void Slurm_Showq::query_running_jobs()
 
 	  // Display job info
 
-	  printf("%-10i", job->job_id);
+	  if (NULL != job->array_task_str)
+	    {
+	      snprintf(jobid_short, 255, "%i_[%s]", job->job_id, job->array_task_str);
+	      jobid_short[20] = '\0';
+	      printf("%-20s", jobid_short);
+	    }
+	  else
+	      printf("%-20i", job->job_id);
 
 	  if(NULL != job->name)
 		strncpy(jobname_short,job->name,10);
@@ -537,13 +552,13 @@ void Slurm_Showq::query_running_jobs()
       printf("\nBLOCKED JOBS--\n");
       if(long_listing)
 	{
-	  printf("JOBID     JOBNAME    USERNAME      STATE          CORE HOST QUEUE           WCLIMIT  QUEUETIME\n");
-	  printf("========================================================================================================\n");
+	  printf("JOBID               JOBNAME    USERNAME      STATE          CORE HOST QUEUE           WCLIMIT  QUEUETIME\n");
+	  printf("==================================================================================================================\n");
 	}
       else
 	{
-	  printf("JOBID     JOBNAME    USERNAME      STATE          CORE   WCLIMIT  QUEUETIME\n");
-	  printf("=====================================================================================\n");
+	  printf("JOBID               JOBNAME    USERNAME      STATE          CORE   WCLIMIT  QUEUETIME\n");
+	  printf("===============================================================================================\n");
 	}
 
       for(int i=0; i<pending_jobs.size();i++)
@@ -566,7 +581,14 @@ void Slurm_Showq::query_running_jobs()
 
 	  // Display job info
 
-	  printf("%-10i", job->job_id);
+	  if (NULL != job->array_task_str)
+	    {
+	      snprintf(jobid_short, 255, "%i_[%s]", job->job_id, job->array_task_str);
+	      jobid_short[20] = '\0';
+	      printf("%-20s", jobid_short);
+	    }
+	  else
+	      printf("%-20i", job->job_id);
 
 	  if(NULL != job->name)
 		strncpy(jobname_short,job->name,10);
